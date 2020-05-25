@@ -11,11 +11,25 @@ import numpy as np
 
 
 def from_3x3_to_6x1(T):
-    """Convert symmetric second order tensor to first order tensor. (Eq 47)
-    Args:
-        T : 3 x 3 tensor.
-    Returns:
-        V : Corresponding 6 x 1 tensor.
+    """Return Voigt notation representation of a symmetric 3 x 3 tensor.
+
+    Conversion is done according to Equation 47 in [1]_.
+
+    Parameters
+    ----------
+    T : ndarray
+        A symmetric 3 x 3 tensor.
+
+    Returns
+    -------
+    V : ndarray
+        6 x 1 array corresponding to T.
+
+    References
+    ----------
+    .. [1] Westin et al. 2016 ""Q-space trajectory imaging for multidimensional
+           diffusion MRI of the human brain"
+           https://doi.org/10.1016/j.neuroimage.2016.02.039
     """
     C = np.sqrt(2)
     V = np.array([[T[0, 0],
@@ -28,11 +42,25 @@ def from_3x3_to_6x1(T):
 
 
 def from_6x1_to_3x3(V):
-    """Convert first order tensor to symmetric second order tensor.
-    Args:
-        V : 6 x 1 tensor.
-    Returns:
-        T : Corresponding 3 x 3 tensor.
+    """Return tensor corresponding to a Voigt notation 6 x 1 array.
+
+    Conversion is done according to Equation 47 in [1]_.
+
+    Parameters
+    ----------
+    V : ndarray
+        6 x 1 array corresponding to T.
+
+    Returns
+    -------
+    T : ndarray
+        A symmetric 3 x 3 tensor.
+
+    References
+    ----------
+    .. [1] Westin et al. 2016 ""Q-space trajectory imaging for multidimensional
+           diffusion MRI of the human brain"
+           https://doi.org/10.1016/j.neuroimage.2016.02.039
     """
     C = np.sqrt(1 / 2)
     T = np.array([[V[0, 0], C * V[5, 0], C * V[4, 0]],
@@ -42,11 +70,25 @@ def from_6x1_to_3x3(V):
 
 
 def from_6x6_to_21x1(T):
-    """Convert symmetric second order tensor to first order tensor. (Eq 48)
-    Args:
-        T : 6 x 6 array.
-    Returns:
-        V : Corresponding 21 x 1 tensor.
+    """Return Voigt notation representation of a symmetric 6 x 6 tensor.
+
+    Conversion is done according to Equation 48 in [1]_.
+
+    Parameters
+    ----------
+    T : ndarray
+        A symmetric 6 x 6 tensor.
+
+    Returns
+    -------
+    V : ndarray
+        21 x 1 array corresponding to T.
+
+    References
+    ----------
+    .. [1] Westin et al. 2016 ""Q-space trajectory imaging for multidimensional
+           diffusion MRI of the human brain"
+           https://doi.org/10.1016/j.neuroimage.2016.02.039
     """
     C2 = np.sqrt(2)
     V = np.array([[T[0, 0], T[1, 1], T[2, 2],
@@ -60,19 +102,38 @@ def from_6x6_to_21x1(T):
 
 
 def from_21x1_to_6x6(V):
-    """Convert first order tensor to symmetric second order tensor.
-    Args:
-        T: 21 x 1 tensor.
-    Returns:
-        Corresponding 6 x 6 tensor.
-    """
-    v = V[:, 0]  # Easier to read without extra dimension
-    C2 = np.sqrt(1 / 2)
-    T = np.array([[v[0], C2*v[5], C2*v[4], C2*v[6], C2*v[7], C2*v[8]],
-                  [C2*v[5], v[1], C2*v[3], C2*v[9], C2*v[10], C2*v[11]],
-                  [C2*v[4], C2*v[3], v[2], C2*v[12], C2*v[13], C2*v[14]],
-                  [C2*v[6], C2*v[9], C2*v[12], v[15], C2*v[18], C2*v[20]],
-                  [C2*v[7], C2*v[10], C2*v[13], C2*v[18], v[16], C2*v[19]],
-                  [C2*v[8], C2*v[11], C2*v[14], C2*v[20], C2*v[19], v[17]]])
-    return T
+    """Return tensor corresponding to a Voigt notation 21 x 1 array.
 
+    Conversion is done according to Equation 49 in [1]_.
+
+    Parameters
+    ----------
+    V : ndarray
+        21 x 1 array corresponding to T.
+
+    Returns
+    -------
+    T : ndarray
+        A symmetric 3 x 3 tensor.
+
+    References
+    ----------
+    .. [1] Westin et al. 2016 ""Q-space trajectory imaging for multidimensional
+           diffusion MRI of the human brain"
+           https://doi.org/10.1016/j.neuroimage.2016.02.039
+    """
+    v = V[:, 0]  # Code is easier to read without the extra dimension
+    C2 = np.sqrt(1 / 2)
+    T = np.array([[v[0], C2 * v[5], C2 * v[4], C2 * v[6], C2 * v[7],
+                   C2 * v[8]],
+                  [C2 * v[5], v[1], C2 * v[3], C2 * v[9], C2 * v[10],
+                   C2 * v[11]],
+                  [C2 * v[4], C2 * v[3], v[2], C2 * v[12], C2 * v[13],
+                   C2 * v[14]],
+                  [C2 * v[6], C2 * v[9], C2 * v[12], v[15], C2 * v[18],
+                   C2 * v[20]],
+                  [C2 * v[7], C2 * v[10], C2 * v[13], C2 * v[18], v[16],
+                   C2 * v[19]],
+                  [C2 * v[8], C2 * v[11], C2 * v[14], C2 * v[20], C2 * v[19],
+                   v[17]]])
+    return T
